@@ -4,13 +4,12 @@ import {
   Activity,
   Power,
   Users,
-  Zap,
-  ShieldCheck,
   SlidersHorizontal,
   RotateCcw,
   Terminal,
   CheckCircle2,
   AlertTriangle,
+  ShieldCheck,
 } from "lucide-react";
 
 type FeatureFlag = {
@@ -48,12 +47,11 @@ const initialFlags: FeatureFlag[] = [
 export default function InteractiveDemo() {
   const [flags, setFlags] = useState(initialFlags);
   const [selectedFlagId, setSelectedFlagId] = useState("new_dashboard");
-
   const [traffic, setTraffic] = useState(1000);
 
-  const selectedFlag = flags.find((flag) => flag.id === selectedFlagId)!;
+  const selectedFlag =
+    flags.find((flag) => flag.id === selectedFlagId) ?? flags[0];
 
-  // Update a feature flag
   const updateFlag = (id: string, updates: Partial<FeatureFlag>) => {
     setFlags((currentFlags) =>
       currentFlags.map((flag) =>
@@ -62,14 +60,11 @@ export default function InteractiveDemo() {
     );
   };
 
-  // Calculate simulated audience
   const eligibleUsers = useMemo(() => {
     if (!selectedFlag.enabled) return 0;
-
     return Math.floor((traffic * selectedFlag.rollout) / 100);
   }, [traffic, selectedFlag]);
 
-  // Reset demo
   const resetDemo = () => {
     setFlags(initialFlags);
     setSelectedFlagId("new_dashboard");
@@ -79,18 +74,21 @@ export default function InteractiveDemo() {
   const activeFlags = flags.filter((flag) => flag.enabled).length;
 
   return (
-    <section id="demo" className="relative overflow-hidden px-6 py-28 lg:px-10">
+    <section
+      id="demo"
+      className="relative overflow-hidden bg-[#080B14] px-5 py-20 sm:px-8 sm:py-24 lg:px-12 lg:py-28"
+    >
       {/* Background effects */}
-      <div className="pointer-events-none absolute left-1/2 top-1/3 h-96 w-96 -translate-x-1/2 rounded-full bg-violet-600/[0.07] blur-[130px]" />
+      <div className="pointer-events-none absolute left-1/2 top-1/3 h-72 w-72 -translate-x-1/2 rounded-full bg-violet-600/[0.07] blur-[110px] sm:h-96 sm:w-96 sm:blur-[130px]" />
 
-      <div className="relative mx-auto max-w-7xl">
+      <div className="relative mx-auto w-full max-w-7xl">
         {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mx-auto mb-14 max-w-2xl text-center"
+          className="mx-auto mb-10 max-w-2xl text-center sm:mb-14"
         >
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-500/[0.07] px-3 py-1.5">
             <Activity size={13} className="text-cyan-400" />
@@ -99,7 +97,7 @@ export default function InteractiveDemo() {
             </span>
           </div>
 
-          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-5xl">
+          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
             Take control.
             <br />
             <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">
@@ -116,13 +114,13 @@ export default function InteractiveDemo() {
         {/* Main playground */}
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0E1421] shadow-2xl shadow-black/30">
           {/* Header */}
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.07] px-5 py-4 sm:px-7">
+          <div className="flex flex-col gap-4 border-b border-white/[0.07] px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7">
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-500/10">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-500/10">
                 <SlidersHorizontal size={17} className="text-violet-400" />
               </div>
 
-              <div>
+              <div className="min-w-0">
                 <h3 className="text-sm font-semibold text-white">
                   Feature Control Center
                 </h3>
@@ -132,7 +130,7 @@ export default function InteractiveDemo() {
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between gap-3 sm:justify-end">
               <span className="flex items-center gap-2 text-[10px] text-emerald-400">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                 Simulation Active
@@ -140,7 +138,7 @@ export default function InteractiveDemo() {
 
               <button
                 onClick={resetDemo}
-                className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-xs text-slate-400 transition hover:bg-white/[0.05] hover:text-white"
+                className="flex shrink-0 items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-xs text-slate-400 transition hover:bg-white/[0.05] hover:text-white"
               >
                 <RotateCcw size={13} />
                 Reset
@@ -149,48 +147,49 @@ export default function InteractiveDemo() {
           </div>
 
           {/* Metrics */}
-          <div className="grid grid-cols-2 gap-px border-b border-white/[0.07] bg-white/[0.06] lg:grid-cols-4">
-            <div className="bg-[#0E1421] p-5">
-              <p className="text-[10px] uppercase tracking-wider text-slate-500">
-                Total Flags
-              </p>
-              <p className="mt-2 text-2xl font-bold text-white">
-                {flags.length}
-              </p>
-            </div>
-
-            <div className="bg-[#0E1421] p-5">
-              <p className="text-[10px] uppercase tracking-wider text-slate-500">
-                Active Flags
-              </p>
-              <p className="mt-2 text-2xl font-bold text-emerald-400">
-                {activeFlags}
-              </p>
-            </div>
-
-            <div className="bg-[#0E1421] p-5">
-              <p className="text-[10px] uppercase tracking-wider text-slate-500">
-                Simulated Users
-              </p>
-              <p className="mt-2 text-2xl font-bold text-white">
-                {traffic.toLocaleString()}
-              </p>
-            </div>
-
-            <div className="bg-[#0E1421] p-5">
-              <p className="text-[10px] uppercase tracking-wider text-slate-500">
-                Selected Audience
-              </p>
-              <p className="mt-2 text-2xl font-bold text-cyan-400">
-                {eligibleUsers.toLocaleString()}
-              </p>
-            </div>
+          <div className="grid grid-cols-2 gap-px border-b border-white/[0.07] bg-white/[0.06] sm:grid-cols-4">
+            {[
+              {
+                label: "Total Flags",
+                value: flags.length,
+                color: "text-white",
+              },
+              {
+                label: "Active Flags",
+                value: activeFlags,
+                color: "text-emerald-400",
+              },
+              {
+                label: "Simulated Users",
+                value: traffic.toLocaleString(),
+                color: "text-white",
+              },
+              {
+                label: "Selected Audience",
+                value: eligibleUsers.toLocaleString(),
+                color: "text-cyan-400",
+              },
+            ].map((metric) => (
+              <div
+                key={metric.label}
+                className="min-w-0 bg-[#0E1421] p-4 sm:p-5"
+              >
+                <p className="text-[9px] uppercase tracking-wider text-slate-500 sm:text-[10px]">
+                  {metric.label}
+                </p>
+                <p
+                  className={`mt-2 break-words text-xl font-bold sm:text-2xl ${metric.color}`}
+                >
+                  {metric.value}
+                </p>
+              </div>
+            ))}
           </div>
 
           {/* Playground content */}
-          <div className="grid lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr]">
             {/* Left: Flag controls */}
-            <div className="border-b border-white/[0.07] p-5 sm:p-7 lg:border-b-0 lg:border-r">
+            <div className="min-w-0 border-b border-white/[0.07] p-4 sm:p-7 lg:border-b-0 lg:border-r">
               <div className="mb-5">
                 <h4 className="text-sm font-semibold text-white">
                   Feature Flags
@@ -208,13 +207,13 @@ export default function InteractiveDemo() {
                     <button
                       key={flag.id}
                       onClick={() => setSelectedFlagId(flag.id)}
-                      className={`w-full rounded-xl border p-4 text-left transition ${
+                      className={`w-full min-w-0 rounded-xl border p-3 text-left transition sm:p-4 ${
                         selected
                           ? "border-violet-400/30 bg-violet-500/[0.07]"
                           : "border-white/[0.07] bg-white/[0.02] hover:border-white/20"
                       }`}
                     >
-                      <div className="flex items-center justify-between gap-3">
+                      <div className="flex min-w-0 items-center justify-between gap-3">
                         <div className="min-w-0">
                           <p className="text-sm font-semibold text-slate-200">
                             {flag.name}
@@ -235,13 +234,13 @@ export default function InteractiveDemo() {
                         </span>
                       </div>
 
-                      <div className="mt-4 flex items-center justify-between">
-                        <span className="font-mono text-[10px] text-slate-500">
+                      <div className="mt-4 flex items-center justify-between gap-2">
+                        <span className="min-w-0 truncate font-mono text-[10px] text-slate-500">
                           {flag.id}
                         </span>
 
                         <div
-                          className={`flex h-5 w-9 items-center rounded-full p-0.5 ${
+                          className={`flex h-5 w-9 shrink-0 items-center rounded-full p-0.5 ${
                             flag.enabled
                               ? "justify-end bg-violet-500"
                               : "justify-start bg-slate-700"
@@ -257,7 +256,7 @@ export default function InteractiveDemo() {
 
               {/* Configuration */}
               <div className="mt-7 border-t border-white/[0.07] pt-6">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-3">
                   <div>
                     <h4 className="text-sm font-semibold text-white">
                       Rollout Percentage
@@ -267,7 +266,7 @@ export default function InteractiveDemo() {
                     </p>
                   </div>
 
-                  <span className="rounded-lg border border-violet-400/20 bg-violet-500/10 px-3 py-1.5 font-mono text-sm font-bold text-violet-300">
+                  <span className="shrink-0 rounded-lg border border-violet-400/20 bg-violet-500/10 px-3 py-1.5 font-mono text-sm font-bold text-violet-300">
                     {selectedFlag.rollout}%
                   </span>
                 </div>
@@ -293,13 +292,13 @@ export default function InteractiveDemo() {
                 </div>
 
                 {/* Toggle */}
-                <div className="mt-6 flex items-center justify-between rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-500/10">
+                <div className="mt-6 flex items-center justify-between gap-3 rounded-xl border border-white/[0.07] bg-white/[0.02] p-3 sm:p-4">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-500/10">
                       <Power size={17} className="text-violet-400" />
                     </div>
 
-                    <div>
+                    <div className="min-w-0">
                       <p className="text-xs font-semibold text-white">
                         Master Switch
                       </p>
@@ -318,7 +317,7 @@ export default function InteractiveDemo() {
                         enabled: !selectedFlag.enabled,
                       })
                     }
-                    className={`flex h-6 w-11 items-center rounded-full p-1 transition-colors ${
+                    className={`flex h-6 w-11 shrink-0 items-center rounded-full p-1 transition-colors ${
                       selectedFlag.enabled
                         ? "justify-end bg-violet-500"
                         : "justify-start bg-slate-700"
@@ -331,8 +330,8 @@ export default function InteractiveDemo() {
             </div>
 
             {/* Right: Live preview */}
-            <div className="bg-[#0A101C] p-5 sm:p-7">
-              <div className="mb-5 flex items-center justify-between">
+            <div className="min-w-0 bg-[#0A101C] p-4 sm:p-7">
+              <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <h4 className="text-sm font-semibold text-white">
                     Application Preview
@@ -351,17 +350,17 @@ export default function InteractiveDemo() {
               {/* Preview window */}
               <div className="min-h-[290px] overflow-hidden rounded-xl border border-white/10 bg-[#111827]">
                 {/* Browser bar */}
-                <div className="flex items-center gap-2 border-b border-white/[0.07] px-4 py-3">
-                  <span className="h-2 w-2 rounded-full bg-rose-400" />
-                  <span className="h-2 w-2 rounded-full bg-amber-400" />
-                  <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                <div className="flex min-w-0 items-center gap-2 border-b border-white/[0.07] px-3 py-3 sm:px-4">
+                  <span className="h-2 w-2 shrink-0 rounded-full bg-rose-400" />
+                  <span className="h-2 w-2 shrink-0 rounded-full bg-amber-400" />
+                  <span className="h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
 
-                  <div className="ml-3 rounded-md bg-black/20 px-3 py-1 text-[9px] text-slate-500">
+                  <div className="ml-2 min-w-0 truncate rounded-md bg-black/20 px-3 py-1 text-[9px] text-slate-500 sm:ml-3">
                     app.togglewars.dev
                   </div>
                 </div>
 
-                <div className="p-5">
+                <div className="p-4 sm:p-5">
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={`${selectedFlag.id}-${selectedFlag.enabled}-${selectedFlag.rollout}`}
@@ -380,17 +379,16 @@ export default function InteractiveDemo() {
                           </div>
 
                           <div>
-                            <h3 className="text-xl font-bold text-white">
+                            <h3 className="break-words text-lg font-bold text-white sm:text-xl">
                               {selectedFlag.name}
                             </h3>
-
                             <p className="mt-2 text-xs leading-6 text-slate-400">
                               {selectedFlag.description}
                             </p>
                           </div>
 
-                          <div className="rounded-xl border border-violet-400/20 bg-violet-500/[0.07] p-4">
-                            <div className="mb-3 flex items-center justify-between">
+                          <div className="rounded-xl border border-violet-400/20 bg-violet-500/[0.07] p-3 sm:p-4">
+                            <div className="mb-3 flex items-center justify-between gap-3">
                               <span className="text-xs text-slate-300">
                                 Audience rollout
                               </span>
@@ -410,9 +408,12 @@ export default function InteractiveDemo() {
                               />
                             </div>
 
-                            <div className="mt-4 flex items-center gap-2">
-                              <Users size={14} className="text-cyan-400" />
-                              <span className="text-[10px] text-slate-400">
+                            <div className="mt-4 flex items-start gap-2">
+                              <Users
+                                size={14}
+                                className="mt-0.5 shrink-0 text-cyan-400"
+                              />
+                              <span className="text-[10px] leading-5 text-slate-400">
                                 {eligibleUsers.toLocaleString()} of{" "}
                                 {traffic.toLocaleString()} simulated users
                                 eligible
@@ -452,8 +453,8 @@ export default function InteractiveDemo() {
               </div>
 
               {/* Traffic simulator */}
-              <div className="mt-6 rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">
-                <div className="mb-4 flex items-center justify-between">
+              <div className="mt-6 rounded-xl border border-white/[0.07] bg-white/[0.02] p-3 sm:p-4">
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <Users size={15} className="text-cyan-400" />
                     <span className="text-xs font-semibold text-white">
@@ -485,7 +486,7 @@ export default function InteractiveDemo() {
           </div>
 
           {/* Bottom status */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.07] px-5 py-4 sm:px-7">
+          <div className="flex flex-col gap-3 border-t border-white/[0.07] px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7">
             <div className="flex items-center gap-2 text-[10px] text-slate-500">
               <Terminal size={13} />
               <span>ToggleWars Playground / Simulation Mode</span>
@@ -498,7 +499,7 @@ export default function InteractiveDemo() {
           </div>
         </div>
 
-        <p className="mt-4 text-center text-[10px] text-slate-600">
+        <p className="mt-4 text-center text-[10px] leading-5 text-slate-600">
           Demo uses local simulation data. Actual Flagsmith integration will be
           connected in the application.
         </p>

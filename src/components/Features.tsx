@@ -106,41 +106,42 @@ export default function Features() {
   return (
     <section
       id="features"
-      className="relative overflow-hidden px-6 py-28 lg:px-10"
+      className="relative overflow-hidden px-5 py-20 sm:px-8 sm:py-24 lg:px-12 lg:py-28"
     >
-      <div className="pointer-events-none absolute left-0 top-1/3 h-80 w-80 rounded-full bg-violet-600/[0.06] blur-[120px]" />
+      {/* Background glow */}
+      <div className="pointer-events-none absolute left-0 top-1/3 h-64 w-64 rounded-full bg-violet-600/[0.06] blur-[100px] sm:h-80 sm:w-80 sm:blur-[120px]" />
 
-      <div className="relative mx-auto max-w-7xl">
+      <div className="relative mx-auto w-full max-w-7xl">
         {/* Section heading */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6 }}
-          className="mx-auto mb-16 max-w-2xl text-center"
+          className="mx-auto mb-12 max-w-2xl text-center sm:mb-16"
         >
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-violet-400/20 bg-violet-500/[0.07] px-3 py-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
-            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-violet-300">
+          <div className="mb-5 inline-flex max-w-full items-center gap-2 rounded-full border border-violet-400/20 bg-violet-500/[0.07] px-3 py-1.5">
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-violet-400" />
+            <span className="text-[9px] font-semibold uppercase tracking-[0.16em] text-violet-300 sm:text-[10px] sm:tracking-[0.2em]">
               Powerful Capabilities
             </span>
           </div>
 
-          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-5xl">
+          <h2 className="text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
             Everything you need to{" "}
             <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">
               ship safely.
             </span>
           </h2>
 
-          <p className="mt-5 text-sm leading-7 text-slate-400 sm:text-base">
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-slate-400 sm:mt-5 sm:text-base">
             Take complete control over feature releases with intelligent
             toggles, targeted rollouts and real-time safeguards.
           </p>
         </motion.div>
 
         {/* Feature cards */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             const styles = accentStyles[feature.accent];
@@ -155,14 +156,14 @@ export default function Features() {
                   duration: 0.5,
                   delay: index * 0.08,
                 }}
-                className={`group relative rounded-2xl border border-white/[0.07] bg-[#0E1421]/80 p-7 transition-all duration-300 hover:-translate-y-1 hover:border-violet-400/20 hover:bg-[#111827] hover:shadow-2xl ${styles.glow}`}
+                className={`group relative flex min-w-0 flex-col rounded-2xl border border-white/[0.07] bg-[#0E1421]/80 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-violet-400/20 hover:bg-[#111827] hover:shadow-2xl sm:p-6 lg:p-7 ${styles.glow}`}
               >
                 {/* Top row */}
-                <div className="mb-8 flex items-center justify-between">
+                <div className="mb-6 flex items-center justify-between sm:mb-8">
                   <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-xl border ${styles.icon}`}
+                    className={`flex h-11 w-11 items-center justify-center rounded-xl border sm:h-12 sm:w-12 ${styles.icon}`}
                   >
-                    <Icon size={23} strokeWidth={1.7} />
+                    <Icon size={22} strokeWidth={1.7} />
                   </div>
 
                   <span className="font-mono text-xs text-slate-600">
@@ -171,25 +172,25 @@ export default function Features() {
                 </div>
 
                 {/* Content */}
-                <h3 className="text-lg font-semibold text-white transition-colors group-hover:text-violet-200">
+                <h3 className="text-base font-semibold leading-snug text-white transition-colors group-hover:text-violet-200 sm:text-lg">
                   {feature.title}
                 </h3>
 
-                <p className="mt-3 min-h-[84px] text-sm leading-7 text-slate-400">
+                <p className="mt-3 flex-1 text-sm leading-7 text-slate-400">
                   {feature.description}
                 </p>
 
                 {/* Footer */}
-                <div className="mt-7 flex items-center justify-between border-t border-white/[0.07] pt-5">
+                <div className="mt-6 flex items-center justify-between gap-3 border-t border-white/[0.07] pt-5 sm:mt-7">
                   <span
-                    className={`text-[10px] font-semibold uppercase tracking-[0.15em] ${styles.tag}`}
+                    className={`text-[9px] font-semibold uppercase tracking-[0.12em] sm:text-[10px] sm:tracking-[0.15em] ${styles.tag}`}
                   >
                     {feature.tag}
                   </span>
 
                   <ArrowUpRight
                     size={16}
-                    className="text-slate-600 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white"
+                    className="shrink-0 text-slate-600 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white"
                   />
                 </div>
               </motion.div>
@@ -198,12 +199,14 @@ export default function Features() {
         </div>
 
         {/* Bottom message */}
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-3 text-center">
-          <span className="h-px w-10 bg-white/10" />
-          <p className="text-xs text-slate-500">
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-3 text-center sm:mt-12">
+          <span className="h-px w-6 bg-white/10 sm:w-10" />
+
+          <p className="text-xs leading-6 text-slate-500 sm:text-sm">
             Built for developers who want control without complexity.
           </p>
-          <span className="h-px w-10 bg-white/10" />
+
+          <span className="h-px w-6 bg-white/10 sm:w-10" />
         </div>
       </div>
     </section>
